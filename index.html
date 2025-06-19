@@ -14,14 +14,12 @@
       --button-hover: #005bb5;
     }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg-color: #1c1c1e;
-        --text-color: #f5f5f7;
-        --card-bg: #2c2c2e;
-        --button-bg: #0a84ff;
-        --button-hover: #0066cc;
-      }
+    body.dark {
+      --bg-color: #1c1c1e;
+      --text-color: #f5f5f7;
+      --card-bg: #2c2c2e;
+      --button-bg: #0a84ff;
+      --button-hover: #0066cc;
     }
 
     body {
@@ -30,6 +28,7 @@
       padding: 0;
       background-color: var(--bg-color);
       color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
     }
 
     header {
@@ -38,14 +37,32 @@
       text-align: center;
       padding: 2rem 1rem;
       font-size: 2rem;
+      position: relative;
+    }
+
+    .toggle-mode {
+      position: absolute;
+      top: 1.5rem;
+      left: 1rem;
+      background-color: var(--button-bg);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .toggle-mode:hover {
+      background-color: var(--button-hover);
     }
 
     .programs-container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 1.5rem;
-      padding: 1.5rem;
-      max-width: 1200px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1400px;
       margin: auto;
     }
 
@@ -53,7 +70,7 @@
       background-color: var(--card-bg);
       border-radius: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-      padding: 1rem;
+      padding: 1.5rem;
       text-align: center;
       transition: transform 0.3s;
     }
@@ -63,21 +80,21 @@
     }
 
     .program-card img {
-      width: 100%;
-      max-height: 200px;
-      object-fit: cover;
+      max-width: 100%;
+      height: auto;
       border-radius: 10px;
       margin-bottom: 1rem;
+      display: block;
     }
 
     .program-title {
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       font-weight: bold;
       margin-bottom: 0.5rem;
     }
 
     .program-description {
-      font-size: 0.95rem;
+      font-size: 1rem;
       margin-bottom: 1rem;
       color: #777;
     }
@@ -86,7 +103,7 @@
       background-color: var(--button-bg);
       color: white;
       border: none;
-      padding: 0.6rem 1.3rem;
+      padding: 0.7rem 1.5rem;
       font-size: 1rem;
       border-radius: 10px;
       cursor: pointer;
@@ -101,119 +118,354 @@
 
     footer {
       text-align: center;
-      padding: 1.5rem 1rem;
+      padding: 1rem;
       font-size: 0.9rem;
       color: #888;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 600px) {
       header {
         font-size: 1.5rem;
         padding: 1.5rem 1rem;
       }
 
-      .program-description {
-        font-size: 0.85rem;
-      }
-
-      .install-button {
+      .toggle-mode {
+        top: 1rem;
+        left: 1rem;
+        padding: 0.4rem 0.8rem;
         font-size: 0.9rem;
-        padding: 0.5rem 1rem;
       }
     }
   </style>
 </head>
 <body>
-
-  <header>Ipa App</header>
+  <header>
+    Ipa App
+    <button class="toggle-mode" onclick="toggleDarkMode()">الوضع الليلي</button>
+  </header>
 
   <section class="programs-container">
-
-    <!-- البرنامج 1 -->
     <div class="program-card">
-      <img src="https://h.top4top.io/p_3457i200e1.jpg" alt="SnapChat">
+      <img src="https://h.top4top.io/p_3457i200e1.jpg" alt="برنامج 1">
       <div class="program-title">SnapChat</div>
       <div class="program-description">Hz Snap 1.0v النسخة مدفوعة لشراء الكود تواصل معي سناب</div>
       <a class="install-button" href="https://download851.mediafire.com/xpgutku6r70g1xVHKwUw7M5P-hUpv5wshfxXMeYjx6337XZpetRHoaA0uW7YtMBBBUAKU5jLswtRWw16F7M2l4Bww-E_ADMLRMO8NmFr8FYZWU5OgLznmJBcgaOudl2yGK4d05Tjrf4gKoZ6mG3qjFyww3aF4WAkc5vcsLBFBB4iOWQ/akpb5wkj0lw7smx/Snapchat-finel.ipa" target="_blank">تثبيت</a>
     </div>
 
-    <!-- البرنامج 2 -->
     <div class="program-card">
-      <img src="https://j.top4top.io/p_3455habtc1.png" alt="YouTube">
+      <img src="https://j.top4top.io/p_3455habtc1.png" alt="برنامج 2">
       <div class="program-title">YouTube</div>
       <div class="program-description">iSponsorBlock 1.2.12v</div>
       <a class="install-button" href="https://download1588.mediafire.com/si2ch1rzcuwgfqAj5J0WO8E1gKR_FLcl2CIWebibASIgkHizUhyRZBXYXUR5MX4P6tVz6ERzmeBwJMhWscsG2vThdiZ2_Hz9c2dVxSg5BE5O1eCwOvkpRIG9WUgt9UHjZcA8IpCPYwH-RHooHGblse9OEkUrXbk8rFQUrWu_FlrNKMY/7ubf7xm8ne8n2pj/YouTube_20.23.3_iSponsorBlock.ipa" target="_blank">تثبيت</a>
     </div>
 
-    <!-- البرنامج 3 -->
     <div class="program-card">
-      <img src="https://e.top4top.io/p_3455o55u21.png" alt="Instagram">
+      <img src="https://e.top4top.io/p_3455o55u21.png" alt="برنامج 3">
       <div class="program-title">Instagram</div>
       <div class="program-description">BHinstagram 1.2v</div>
       <a class="install-button" href="https://download944.mediafire.com/irzphijd7gbgHsZjKhwbjyv5rG9ohHknDYZZIKKK7YSlqbqg0P0zWk1_oNMZcabXGWtb8UNSZ3xw1e9KF8Tj7dVzx52ljXLqaySXVi3ehZ_zyGxFiuD7tjClpGlo1mMFqZYzUEYinN3zyy4VTp_2vsnSUb4Z--AX4igHyX27FJciO3w/0hz26rogl2lwpzl/instagram.png" target="_blank">تثبيت</a>
     </div>
 
-    <!-- البرنامج 4 -->
     <div class="program-card">
-      <img src="https://l.top4top.io/p_3455649e81.png" alt="TikTok">
+      <img src="https://l.top4top.io/p_3455649e81.png" alt="برنامج 4">
       <div class="program-title">TikTok</div>
       <div class="program-description">ACTikTok 2.1v</div>
       <a class="install-button" href="https://download1527.mediafire.com/eqi5d2fen9qg3gJSiWsH3oMrZZSQAUhRMw6MBlmmC8gP_Y2fDlejcFQ3ffWJ_LB1eJzVvIoxXWJxXVwmDifxQcSBoQg3iPx9cpK3F4FQCHWvFeczELSgQ3lqyEJWm4Hyjr-71RWGZdKg54eAAnx3L-3xV5LwmxUCoLDfb6fkmcxJtAI/y2mnojlvfkvvqq1/TikTok_40.1.0_ACTikTok.ipa" target="_blank">تثبيت</a>
     </div>
 
-    <!-- البرنامج 5 -->
     <div class="program-card">
-      <img src="https://d.top4top.io/p_3455rznff1.png" alt="X">
+      <img src="https://d.top4top.io/p_3455rznff1.png" alt="برنامج 5">
       <div class="program-title">X</div>
       <div class="program-description">BHX 4.4v</div>
       <a class="install-button" href="https://download1349.mediafire.com/ylj9y4jz3z6gwrhThe-Vulqzq199T9pnSZt-AbPIQT5kXEBQe_iliIEgpkHINbV7q91kOUuIYGFn_1M2I2DHypT_ooJhDWOIoRO9brBtB7nuwdqnVB_RdnE7_cmkn4ZUdyz30HEwdRLfiKz5NBfRcIZnamRP0wsZm0VXfKiUMcyi-M8/sm657n655a0tkv7/Twitter_11.4_BHX.ipa" target="_blank">تثبيت</a>
     </div>
 
-    <!-- البرنامج 6 -->
     <div class="program-card">
-      <img src="https://f.top4top.io/p_34552y84k1.png" alt="Messenger">
+      <img src="https://f.top4top.io/p_34552y84k1.png" alt="برنامج 6">
       <div class="program-title">Messenger</div>
       <div class="program-description">Flow 1.0v</div>
       <a class="install-button" href="https://download1501.mediafire.com/2pecv8rs2urgzY2tgHQ9fxDEB5uFdwP7g8Jqkt9yUaPxWWxm3Bccy9hLX5GpEX_a9nSlsV3yWfSGhthESEkWxjBRAkPyquj3EDPIFww7p_BpGcgCEpswSKRq2Q-eObXGTppgemyhJuo_JPS5sHovU0516XI8Mh_fOWp6-lRGaRuI1EA/o97wtdwht6l36l5/Messenger_511.0.0_Flow.ipa" target="_blank">تثبيت</a>
     </div>
 
-    <!-- البرنامج 7 -->
     <div class="program-card">
-      <img src="https://a.top4top.io/p_3455330vm1.png" alt="Facebook">
+      <img src="https://a.top4top.io/p_3455330vm1.png" alt="برنامج 7">
       <div class="program-title">Facebook</div>
       <div class="program-description">Glow 1.0.1v</div>
       <a class="install-button" href="https://download948.mediafire.com/kjmv53a48fyg8Qfj3eSj2sG1TDw0jEv8sDglNirjh196FYkrg2V-HrH5H9ho6xQCOIDkiWdChdVBa1yezmLcqY9CPhwcF62tO24LWx-8PIwMHtR6ck0sHJR0LagXHzA7D1MU-9FYw0xFUcd9bfCFlLMBjp6Owr6xEr5SLNH-NSTIaPU/k3dmpscmlbn4cgn/Facebook_517.0.0_Glow.ipa" target="_blank">تثبيت</a>
     </div>
 
-    <!-- البرنامج 8 -->
     <div class="program-card">
-      <img src="https://f.top4top.io/p_3455hfk3c1.png" alt="Jodel">
+      <img src="https://f.top4top.io/p_3455hfk3c1.png" alt="برنامج 8">
       <div class="program-title">Jodel</div>
       <div class="program-description">PaidACJodel 1.7v</div>
       <a class="install-button" href="https://download1085.mediafire.com/ce5y6173zslgEZHTxwLHtW1aZkXiHCEnP-mTTztWTK9ng_dw0U4buUbCbEr0J8n-kJB649wviUZptUfYF9fOVekHPqnu0LCN2WsgatLPTE6WM8MwBahs6TYV2TwVScHba_7mY0zZzy0QLKVgmD_b_LCWRcRLR_8gpvy_qbadF_hE9VE/giqxf40g41j5shx/Jodel_7.149_ACJodel.ipa" target="_blank">تثبيت</a>
     </div>
 
-    <!-- البرنامج 9 -->
     <div class="program-card">
-      <img src="https://k.top4top.io/p_3457lip8f1.png" alt="Twitch">
+      <img src="https://k.top4top.io/p_3457lip8f1.png" alt="برنامج 9">
       <div class="program-title">Twitch</div>
       <div class="program-description">TwitchAdBlock 0.1.5v</div>
       <a class="install-button" href="https://download850.mediafire.com/cvkeimm8o9jgzvzOz6B2EYpghWs8HS8dUUANN6-54xfgL7h7lXkA3KbRmH0X8rSctq26hyIF27dd_auAxm-7wxw_j-FQBQr6BzZbf1Eiblu2HAK3k4DYd95yy32Dzus8D9OAoZXt8yjhfy6hWlVJMpjSFggRB0ztvFlJehdTYs0gSsk/pcicv4l421vtoo8/Twitch_24.9_TwitchAdBlock.ipa" target="_blank">تثبيت</a>
     </div>
 
-    <!-- البرنامج 10 -->
     <div class="program-card">
-      <img src="https://j.top4top.io/p_34572x9da1.png" alt="WhatsApp Bs">
+      <img src="https://g.top4top.io/p_3457rnboq1.png" alt="برنامج 10">
+      <div class="program-title">WhatsApp</div>
+      <div class="program-description">Watusi 1.2.74v</div>
+      <a class="install-button" href="https://download848.mediafire.com/mvlqli1vvmxgsKl9ABSxFmPBJiqOp4NAYznCOhtwGPKKfuoPZDdETPwxGnQRK6PlruabHYBAvDZCYdtDMZ_IG73HLoSHNxkSVpT91hywq2jdqDW620ICfHPJt7X-zI5wjRt2VwAbp2Fz2qHz3xo4SfaN7lwZkizJL_9JCp8DrcC7Utc/jx9b9n5h30t0qsk/WhatsApp_25.18.7_Watusi.ipa" target="_blank">تثبيت</a>
+    </div>
+
+    <div class="program-card">
+      <img src="https://j.top4top.io/p_34572x9da1.png" alt="برنامج 11">
       <div class="program-title">WhatsApp Bs</div>
       <div class="program-description">Watusi 1.2.74v</div>
       <a class="install-button" href="https://download1528.mediafire.com/ni3o02qb903gkpIRVGqwgrIgdlL5IZVVH-gaJJuQCLhNqBEFLKLn0rktYOueXzuCQS3gJSDuxxZNH2D6GhBY14d3EKHtMubnbgXqEtLkXZRCs4_Xz4idJVUp3C0W5fzRZ4tu_KHB8mP9dbFZB9l1N6a1jNmP8eWR9nG52f5YWNTohyU/1727pfhw2le31jt/WhatsApp+Business_25.17.81_Watusi.ipa" target="_blank">تثبيت</a>
     </div>
-
   </section>
 
   <footer>
-    جميع الحقوق محفوظة &copy; 2025 Hz Bahkali
+    Hz Bahkali جميع الحقوق محفوظة &copy; 2025
   </footer>
 
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+    }
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ipa App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #f5f5f7;
+      --text-color: #1d1d1f;
+      --card-bg: white;
+      --button-bg: #0071e3;
+      --button-hover: #005bb5;
+    }
+
+    body.dark {
+      --bg-color: #1c1c1e;
+      --text-color: #f5f5f7;
+      --card-bg: #2c2c2e;
+      --button-bg: #0a84ff;
+      --button-hover: #0066cc;
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    header {
+      background-color: #000;
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 2rem;
+      position: relative;
+    }
+
+    .toggle-mode {
+      position: absolute;
+      top: 1.5rem;
+      left: 1rem;
+      background-color: var(--button-bg);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .toggle-mode:hover {
+      background-color: var(--button-hover);
+    }
+
+    .programs-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1400px;
+      margin: auto;
+    }
+
+    .program-card {
+      background-color: var(--card-bg);
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      padding: 1.5rem;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .program-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .program-card img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .program-title {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .program-description {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      color: #777;
+    }
+
+    .install-button {
+      background-color: var(--button-bg);
+      color: white;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background-color 0.3s;
+    }
+
+    .install-button:hover {
+      background-color: var(--button-hover);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        font-size: 1.5rem;
+        padding: 1.5rem 1rem;
+      }
+
+      .toggle-mode {
+        top: 1rem;
+        left: 1rem;
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Ipa App
+    <button class="toggle-mode" onclick="toggleDarkMode()">الوضع الليلي</button>
+  </header>
+
+  <section class="programs-container">
+    <div class="program-card">
+      <img src="https://h.top4top.io/p_3457i200e1.jpg" alt="برنامج 1">
+      <div class="program-title">SnapChat</div>
+      <div class="program-description">Hz Snap 1.0v النسخة مدفوعة لشراء الكود تواصل معي سناب</div>
+      <a class="install-button" href="https://download851.mediafire.com/xpgutku6r70g1xVHKwUw7M5P-hUpv5wshfxXMeYjx6337XZpetRHoaA0uW7YtMBBBUAKU5jLswtRWw16F7M2l4Bww-E_ADMLRMO8NmFr8FYZWU5OgLznmJBcgaOudl2yGK4d05Tjrf4gKoZ6mG3qjFyww3aF4WAkc5vcsLBFBB4iOWQ/akpb5wkj0lw7smx/Snapchat-finel.ipa" target="_blank">تثبيت</a>
+    </div>
+
+    <div class="program-card">
+      <img src="https://j.top4top.io/p_3455habtc1.png" alt="برنامج 2">
+      <div class="program-title">YouTube</div>
+      <div class="program-description">iSponsorBlock 1.2.12v</div>
+      <a class="install-button" href="https://download1588.mediafire.com/si2ch1rzcuwgfqAj5J0WO8E1gKR_FLcl2CIWebibASIgkHizUhyRZBXYXUR5MX4P6tVz6ERzmeBwJMhWscsG2vThdiZ2_Hz9c2dVxSg5BE5O1eCwOvkpRIG9WUgt9UHjZcA8IpCPYwH-RHooHGblse9OEkUrXbk8rFQUrWu_FlrNKMY/7ubf7xm8ne8n2pj/YouTube_20.23.3_iSponsorBlock.ipa" target="_blank">تثبيت</a>
+    </div>
+
+    <div class="program-card">
+      <img src="https://e.top4top.io/p_3455o55u21.png" alt="برنامج 3">
+      <div class="program-title">Instagram</div>
+      <div class="program-description">BHinstagram 1.2v</div>
+      <a class="install-button" href="https://download944.mediafire.com/irzphijd7gbgHsZjKhwbjyv5rG9ohHknDYZZIKKK7YSlqbqg0P0zWk1_oNMZcabXGWtb8UNSZ3xw1e9KF8Tj7dVzx52ljXLqaySXVi3ehZ_zyGxFiuD7tjClpGlo1mMFqZYzUEYinN3zyy4VTp_2vsnSUb4Z--AX4igHyX27FJciO3w/0hz26rogl2lwpzl/instagram.png" target="_blank">تثبيت</a>
+    </div>
+
+    <div class="program-card">
+      <img src="https://l.top4top.io/p_3455649e81.png" alt="برنامج 4">
+      <div class="program-title">TikTok</div>
+      <div class="program-description">ACTikTok 2.1v</div>
+      <a class="install-button" href="https://download1527.mediafire.com/eqi5d2fen9qg3gJSiWsH3oMrZZSQAUhRMw6MBlmmC8gP_Y2fDlejcFQ3ffWJ_LB1eJzVvIoxXWJxXVwmDifxQcSBoQg3iPx9cpK3F4FQCHWvFeczELSgQ3lqyEJWm4Hyjr-71RWGZdKg54eAAnx3L-3xV5LwmxUCoLDfb6fkmcxJtAI/y2mnojlvfkvvqq1/TikTok_40.1.0_ACTikTok.ipa" target="_blank">تثبيت</a>
+    </div>
+
+    <div class="program-card">
+      <img src="https://d.top4top.io/p_3455rznff1.png" alt="برنامج 5">
+      <div class="program-title">X</div>
+      <div class="program-description">BHX 4.4v</div>
+      <a class="install-button" href="https://download1349.mediafire.com/ylj9y4jz3z6gwrhThe-Vulqzq199T9pnSZt-AbPIQT5kXEBQe_iliIEgpkHINbV7q91kOUuIYGFn_1M2I2DHypT_ooJhDWOIoRO9brBtB7nuwdqnVB_RdnE7_cmkn4ZUdyz30HEwdRLfiKz5NBfRcIZnamRP0wsZm0VXfKiUMcyi-M8/sm657n655a0tkv7/Twitter_11.4_BHX.ipa" target="_blank">تثبيت</a>
+    </div>
+
+    <div class="program-card">
+      <img src="https://f.top4top.io/p_34552y84k1.png" alt="برنامج 6">
+      <div class="program-title">Messenger</div>
+      <div class="program-description">Flow 1.0v</div>
+      <a class="install-button" href="https://download1501.mediafire.com/2pecv8rs2urgzY2tgHQ9fxDEB5uFdwP7g8Jqkt9yUaPxWWxm3Bccy9hLX5GpEX_a9nSlsV3yWfSGhthESEkWxjBRAkPyquj3EDPIFww7p_BpGcgCEpswSKRq2Q-eObXGTppgemyhJuo_JPS5sHovU0516XI8Mh_fOWp6-lRGaRuI1EA/o97wtdwht6l36l5/Messenger_511.0.0_Flow.ipa" target="_blank">تثبيت</a>
+    </div>
+
+    <div class="program-card">
+      <img src="https://a.top4top.io/p_3455330vm1.png" alt="برنامج 7">
+      <div class="program-title">Facebook</div>
+      <div class="program-description">Glow 1.0.1v</div>
+      <a class="install-button" href="https://download948.mediafire.com/kjmv53a48fyg8Qfj3eSj2sG1TDw0jEv8sDglNirjh196FYkrg2V-HrH5H9ho6xQCOIDkiWdChdVBa1yezmLcqY9CPhwcF62tO24LWx-8PIwMHtR6ck0sHJR0LagXHzA7D1MU-9FYw0xFUcd9bfCFlLMBjp6Owr6xEr5SLNH-NSTIaPU/k3dmpscmlbn4cgn/Facebook_517.0.0_Glow.ipa" target="_blank">تثبيت</a>
+    </div>
+
+    <div class="program-card">
+      <img src="https://f.top4top.io/p_3455hfk3c1.png" alt="برنامج 8">
+      <div class="program-title">Jodel</div>
+      <div class="program-description">PaidACJodel 1.7v</div>
+      <a class="install-button" href="https://download1085.mediafire.com/ce5y6173zslgEZHTxwLHtW1aZkXiHCEnP-mTTztWTK9ng_dw0U4buUbCbEr0J8n-kJB649wviUZptUfYF9fOVekHPqnu0LCN2WsgatLPTE6WM8MwBahs6TYV2TwVScHba_7mY0zZzy0QLKVgmD_b_LCWRcRLR_8gpvy_qbadF_hE9VE/giqxf40g41j5shx/Jodel_7.149_ACJodel.ipa" target="_blank">تثبيت</a>
+    </div>
+
+    <div class="program-card">
+      <img src="https://k.top4top.io/p_3457lip8f1.png" alt="برنامج 9">
+      <div class="program-title">Twitch</div>
+      <div class="program-description">TwitchAdBlock 0.1.5v</div>
+      <a class="install-button" href="https://download850.mediafire.com/cvkeimm8o9jgzvzOz6B2EYpghWs8HS8dUUANN6-54xfgL7h7lXkA3KbRmH0X8rSctq26hyIF27dd_auAxm-7wxw_j-FQBQr6BzZbf1Eiblu2HAK3k4DYd95yy32Dzus8D9OAoZXt8yjhfy6hWlVJMpjSFggRB0ztvFlJehdTYs0gSsk/pcicv4l421vtoo8/Twitch_24.9_TwitchAdBlock.ipa" target="_blank">تثبيت</a>
+    </div>
+
+    <div class="program-card">
+      <img src="https://g.top4top.io/p_3457rnboq1.png" alt="برنامج 10">
+      <div class="program-title">WhatsApp</div>
+      <div class="program-description">Watusi 1.2.74v</div>
+      <a class="install-button" href="https://download848.mediafire.com/mvlqli1vvmxgsKl9ABSxFmPBJiqOp4NAYznCOhtwGPKKfuoPZDdETPwxGnQRK6PlruabHYBAvDZCYdtDMZ_IG73HLoSHNxkSVpT91hywq2jdqDW620ICfHPJt7X-zI5wjRt2VwAbp2Fz2qHz3xo4SfaN7lwZkizJL_9JCp8DrcC7Utc/jx9b9n5h30t0qsk/WhatsApp_25.18.7_Watusi.ipa" target="_blank">تثبيت</a>
+    </div>
+
+    <div class="program-card">
+      <img src="https://j.top4top.io/p_34572x9da1.png" alt="برنامج 11">
+      <div class="program-title">WhatsApp Bs</div>
+      <div class="program-description">Watusi 1.2.74v</div>
+      <a class="install-button" href="https://download1528.mediafire.com/ni3o02qb903gkpIRVGqwgrIgdlL5IZVVH-gaJJuQCLhNqBEFLKLn0rktYOueXzuCQS3gJSDuxxZNH2D6GhBY14d3EKHtMubnbgXqEtLkXZRCs4_Xz4idJVUp3C0W5fzRZ4tu_KHB8mP9dbFZB9l1N6a1jNmP8eWR9nG52f5YWNTohyU/1727pfhw2le31jt/WhatsApp+Business_25.17.81_Watusi.ipa" target="_blank">تثبيت</a>
+    </div>
+  </section>
+
+  <footer>
+    Hz Bahkali جميع الحقوق محفوظة &copy; 2025
+  </footer>
+
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+    }
+  </script>
 </body>
 </html>

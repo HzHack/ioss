@@ -570,6 +570,7 @@
 
     .form-group {
       margin-bottom: 1.5rem;
+      position: relative;
     }
 
     .form-group label {
@@ -599,6 +600,13 @@
     .form-group textarea {
       min-height: 120px;
       resize: vertical;
+    }
+
+    .error-message {
+      color: #ff5252;
+      font-size: 0.85rem;
+      margin-top: 0.3rem;
+      display: none;
     }
 
     .submit-btn {
@@ -657,6 +665,28 @@
       transform: translateX(0);
     }
 
+    /* رسالة الخطأ */
+    .error-alert {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #ff5252;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      z-index: 1000;
+      transform: translateX(150%);
+      transition: transform 0.5s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .error-alert.show {
+      transform: translateX(0);
+    }
+
     /* أنيميشنز */
     @keyframes pulse {
       0% { transform: scale(1); }
@@ -667,6 +697,12 @@
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+      20%, 40%, 60%, 80% { transform: translateX(5px); }
     }
 
     @keyframes spin {
@@ -782,6 +818,12 @@
       
       .form-title {
         font-size: 1.5rem;
+      }
+      
+      .confirmation, .error-alert {
+        width: 90%;
+        right: 5%;
+        text-align: center;
       }
     }
   </style>
@@ -1084,6 +1126,7 @@
       <div class="form-group">
         <label for="appName">اسم التطبيق المطلوب</label>
         <input type="text" id="appName" placeholder="أدخل اسم التطبيق الذي ترغب به" required>
+        <div class="error-message" id="nameError">يرجى إدخال اسم التطبيق</div>
       </div>
       <div class="form-group">
         <label for="appVersion">النسخة المطلوبة (اختياري)</label>
@@ -1103,6 +1146,11 @@
   <!-- رسالة تأكيد -->
   <div class="confirmation" id="confirmation">
     <i class="fas fa-check-circle"></i> تم إرسال طلبك بنجاح، شكراً لك!
+  </div>
+
+  <!-- رسالة خطأ -->
+  <div class="error-alert" id="errorAlert">
+    <i class="fas fa-exclamation-circle"></i> <span id="errorMessage">حدث خطأ أثناء إرسال الطلب</span>
   </div>
 
   <script>
@@ -1196,9 +1244,12 @@
     // نموذج طلب التطبيق
     const requestModal = document.getElementById('requestModal');
     const confirmation = document.getElementById('confirmation');
+    const errorAlert = document.getElementById('errorAlert');
+    const errorMessage = document.getElementById('errorMessage');
     const submitRequestBtn = document.getElementById('submitRequestBtn');
     const btnText = submitRequestBtn.querySelector('.btn-text');
     const spinner = submitRequestBtn.querySelector('.spinner');
+    const nameError = document.getElementById('nameError');
     
     function openRequestForm() {
       requestModal.classList.add('active');
@@ -1208,17 +1259,51 @@
     function closeRequestForm() {
       requestModal.classList.remove('active');
       document.body.style.overflow = 'auto';
+      // إعادة تعيين رسائل الخطأ
+      nameError.style.display = 'none';
+      document.getElementById('appName').style.borderColor = '';
+    }
+    
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorAlert.classList.add('show');
+      
+      setTimeout(() => {
+        errorAlert.classList.remove('show');
+      }, 5000);
+    }
+    
+    function validateForm() {
+      const appName = document.getElementById('appName').value;
+      let isValid = true;
+      
+      if (!appName) {
+        nameError.style.display = 'block';
+        document.getElementById('appName').style.borderColor = '#ff5252';
+        document.getElementById('appName').style.animation = 'shake 0.5s';
+        isValid = false;
+        
+        // إزالة أنيميشن الهز بعد انتهائها
+        setTimeout(() => {
+          document.getElementById('appName').style.animation = '';
+        }, 500);
+      } else {
+        nameError.style.display = 'none';
+        document.getElementById('appName').style.borderColor = '';
+      }
+      
+      return isValid;
     }
     
     function submitRequest() {
+      // التحقق من صحة النموذج
+      if (!validateForm()) {
+        return;
+      }
+      
       const appName = document.getElementById('appName').value;
       const appVersion = document.getElementById('appVersion').value;
       const appFeatures = document.getElementById('appFeatures').value;
-      
-      if (!appName) {
-        alert('يرجى إدخال اسم التطبيق المطلوب');
-        return;
-      }
       
       // عرض مؤشر التحميل
       btnText.style.display = 'none';
@@ -1228,14 +1313,15 @@
       // إعداد بيانات البريد الإلكتروني
       const templateParams = {
         to_email: 'swwp142173@gmail.com',
-        app_name: gmail,
+        app_name: appName,
         app_version: appVersion || 'غير محدد',
         app_features: appFeatures || 'غير محددة',
         timestamp: new Date().toLocaleString('ar-SA')
       };
       
       // إرسال البريد الإلكتروني باستخدام EmailJS
-      emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+      // استخدم معرفات الخدمة والقوالب الصحيحة هنا
+      emailjs.send('service_your_service_id', 'template_your_template_id', templateParams)
         .then(function(response) {
           console.log('SUCCESS!', response.status, response.text);
           
@@ -1267,7 +1353,29 @@
           spinner.style.display = 'none';
           submitRequestBtn.disabled = false;
           
-          alert('حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.');
+          // إظهار رسالة الخطأ مع تفاصيل
+          let errorMsg = 'حدث خطأ أثناء إرسال الطلب.';
+          
+          if (error.status === 400) {
+            errorMsg = 'طلب خاطئ: تأكد من صحة البيانات المدخلة.';
+          } else if (error.status === 500) {
+            errorMsg = 'خطأ في الخادم: يرجى المحاولة لاحقاً.';
+          } else if (error.status === 0) {
+            errorMsg = 'لا يوجد اتصال بالإنترنت.';
+          } else if (error.text) {
+            // تحليل رسالة الخطأ لمعرفة السبب الحقيقي
+            try {
+              const errorData = JSON.parse(error.text);
+              if (errorData.error) {
+                errorMsg = `خطأ في الإرسال: ${errorData.error}`;
+              }
+            } catch (e) {
+              // إذا لم نتمكن من تحليل JSON، نستخدم الرسالة الأصلية
+              errorMsg = `خطأ تقني: ${error.text}`;
+            }
+          }
+          
+          showError(errorMsg);
         });
     }
 

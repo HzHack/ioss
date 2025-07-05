@@ -3,227 +3,1296 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ipa App</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <title>IPA App - متجر التطبيقات المعدلة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.emailjs.com/sdk/2.3.2/email.min.js"></script>
+  <script>
+    // تهيئة EmailJS باستخدام معرف المستخدم
+    (function() {
+      emailjs.init("YOUR_USER_ID"); // سيتم استبدال هذا بالمعرف الفعلي
+    })();
+  </script>
   <style>
     :root {
-      --bg-color: #f5f5f7;
-      --text-color: #1d1d1f;
-      --card-bg: white;
-      --button-bg: #0071e3;
-      --button-hover: #005bb5;
+      --primary: #ff6b6b;
+      --primary-dark: #ff5252;
+      --secondary: #6a67ce;
+      --accent: #4cd137;
+      --light: #1c1c1e;
+      --dark: #f5f5f7;
+      --darker: #2c2c2e;
+      --gray: #aeaeb2;
+      --card-bg: #2c2c2e;
+      --card-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 
-    body.dark {
-      --bg-color: #1c1c1e;
-      --text-color: #f5f5f7;
-      --card-bg: #2c2c2e;
-      --button-bg: #0a84ff;
-      --button-hover: #0066cc;
+    body.light {
+      --primary: #ff6b6b;
+      --primary-dark: #ff5252;
+      --secondary: #6a67ce;
+      --accent: #4cd137;
+      --light: #f5f5f7;
+      --dark: #1d1d1f;
+      --darker: #121212;
+      --gray: #8e8e93;
+      --card-bg: #ffffff;
+      --card-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
     body {
       font-family: 'Cairo', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      transition: background-color 0.3s, color 0.3s;
+      background: linear-gradient(135deg, var(--darker) 0%, #000000 100%);
+      color: var(--dark);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-attachment: fixed;
     }
 
+    body.light {
+      background: linear-gradient(135deg, var(--light) 0%, #e6e6e6 100%);
+    }
+
+    /* شريط التقدم */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      z-index: 1000;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* شاشة الترحيب */
+    .welcome-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #ff6b6b 0%, #6a67ce 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .welcome-screen.hidden {
+      opacity: 0;
+      transform: translateY(-100%);
+      pointer-events: none;
+    }
+
+    .logo {
+      width: 120px;
+      height: 120px;
+      background: white;
+      border-radius: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 2rem;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      animation: pulse 2s infinite;
+    }
+
+    .logo i {
+      font-size: 60px;
+      color: #ff6b6b;
+      background: linear-gradient(to right, #ff6b6b, #6a67ce);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .welcome-text {
+      color: white;
+      font-size: 2.5rem;
+      font-weight: 800;
+      text-align: center;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .welcome-text span {
+      background: linear-gradient(to right, #fff, #ffd8d8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* الهيدر */
     header {
-      background-color: #000;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
       color: white;
       text-align: center;
-      padding: 2rem 1rem;
+      padding: 1.8rem 1rem;
       font-size: 2rem;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .header-buttons {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 1rem;
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .header-btn {
+      background-color: rgba(255,255,255,0.15);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .header-btn:hover {
+      background-color: rgba(255,255,255,0.25);
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    /* أدوات البحث والتصفية */
+    .tools-container {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 300px;
+      max-width: 500px;
       position: relative;
     }
 
-    .toggle-mode {
+    .search-box input {
+      width: 100%;
+      padding: 0.9rem 1.2rem 0.9rem 3rem;
+      border-radius: 50px;
+      border: 2px solid rgba(255,255,255,0.1);
+      background: var(--card-bg);
+      color: var(--dark);
+      font-size: 1.1rem;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: var(--card-shadow);
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+    }
+
+    .search-box i {
       position: absolute;
-      top: 1.5rem;
-      left: 1rem;
-      background-color: var(--button-bg);
-      color: white;
+      left: 1.2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+      font-size: 1.2rem;
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .filter-btn {
+      background: var(--card-bg);
       border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
+      padding: 0.7rem 1.5rem;
+      border-radius: 50px;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-weight: 600;
+      color: var(--dark);
+      box-shadow: var(--card-shadow);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .toggle-mode:hover {
-      background-color: var(--button-hover);
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-3px);
     }
 
+    /* حاوية البرامج */
     .programs-container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 2rem;
-      padding: 2rem;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2.5rem;
+      padding: 0 2rem 3rem;
       max-width: 1400px;
-      margin: auto;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.2rem;
+      margin: 2rem 0;
+      color: var(--dark);
+      position: relative;
+      padding-bottom: 1rem;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 5px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border-radius: 10px;
     }
 
     .program-card {
-      background-color: var(--card-bg);
+      background: var(--card-bg);
       border-radius: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      padding: 1.8rem;
       text-align: center;
-      transition: transform 0.3s;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
     }
 
     .program-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .program-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+    }
+
+    .program-badge {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: var(--accent);
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      z-index: 2;
     }
 
     .program-card img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 10px;
-      margin-bottom: 1rem;
+      width: 100%;
+      height: 180px;
+      object-fit: contain;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
       display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .program-card:hover img {
+      transform: scale(1.05);
     }
 
     .program-title {
-      font-size: 1.4rem;
-      font-weight: bold;
+      font-size: 1.5rem;
+      font-weight: 800;
       margin-bottom: 0.5rem;
+      color: var(--dark);
     }
 
     .program-description {
-      font-size: 1rem;
-      margin-bottom: 1rem;
-      color: #777;
+      font-size: 1.05rem;
+      margin-bottom: 1.2rem;
+      color: var(--gray);
+      flex-grow: 1;
+    }
+
+    .version-info {
+      background: rgba(255, 107, 107, 0.1);
+      color: var(--primary);
+      padding: 0.5rem;
+      border-radius: 10px;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      display: inline-block;
+    }
+
+    .rating {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 1.2rem;
+    }
+
+    .rating i {
+      color: #ffc107;
+      font-size: 1.1rem;
     }
 
     .install-button {
-      background-color: var(--button-bg);
+      background: linear-gradient(to right, var(--primary), var(--secondary));
       color: white;
       border: none;
-      padding: 0.7rem 1.5rem;
-      font-size: 1rem;
-      border-radius: 10px;
+      padding: 1rem 1.8rem;
+      font-size: 1.1rem;
+      border-radius: 15px;
       cursor: pointer;
       text-decoration: none;
       display: inline-block;
-      transition: background-color 0.3s;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-weight: 700;
+      width: 100%;
+      letter-spacing: 0.5px;
+      box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
     }
 
     .install-button:hover {
-      background-color: var(--button-hover);
+      background: linear-gradient(to right, var(--primary-dark), var(--secondary));
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
     }
 
+    .install-button i {
+      margin-left: 8px;
+    }
+
+    /* الفوتر */
     footer {
+      background: linear-gradient(to right, var(--darker), #000);
+      color: white;
       text-align: center;
-      padding: 1rem;
-      font-size: 0.9rem;
-      color: #888;
+      padding: 2.5rem 1rem;
+      font-size: 1.1rem;
     }
 
-    @media (max-width: 600px) {
-      header {
-        font-size: 1.5rem;
-        padding: 1.5rem 1rem;
-      }
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
 
-      .toggle-mode {
-        top: 1rem;
-        left: 1rem;
-        padding: 0.4rem 0.8rem;
+    .social-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .social-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .social-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 10px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .social-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: white;
+      transition: transform 0.3s ease;
+      min-width: 80px;
+    }
+
+    .social-link:hover {
+      transform: translateY(-5px);
+    }
+
+    .social-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      width: 70px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .social-link:hover .social-icon {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    .social-label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+
+    .copyright {
+      opacity: 0.7;
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+
+    /* نموذج طلب التطبيق */
+    .request-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 3000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .request-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .request-form {
+      background: var(--card-bg);
+      width: 90%;
+      max-width: 500px;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      transform: translateY(30px);
+      transition: transform 0.5s ease;
+    }
+
+    .request-modal.active .request-form {
+      transform: translateY(0);
+    }
+
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--dark);
+      font-size: 1.8rem;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .close-btn:hover {
+      transform: rotate(90deg);
+      color: var(--primary);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 0.9rem 1.2rem;
+      border-radius: 15px;
+      border: 2px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: var(--dark);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 5px 15px rgba(255, 107, 107, 0.2);
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      padding: 1rem 1.8rem;
+      font-size: 1.1rem;
+      border-radius: 15px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn .spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+    }
+
+    .submit-btn .spinner i {
+      animation: spin 1s linear infinite;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+    }
+
+    /* رسالة التأكيد */
+    .confirmation {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--accent);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      z-index: 1000;
+      transform: translateX(150%);
+      transition: transform 0.5s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .confirmation.show {
+      transform: translateX(0);
+    }
+
+    /* أنيميشنز */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* تصميم الجوال */
+    @media (max-width: 900px) {
+      .programs-container {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+      
+      .welcome-text {
+        font-size: 2rem;
+      }
+      
+      .header-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .header-btn {
+        padding: 0.5rem 1rem;
         font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .tools-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .search-box {
+        min-width: 100%;
+      }
+      
+      .header-content {
+        padding-top: 5rem;
+      }
+      
+      .header-buttons {
+        top: 1rem;
+        transform: none;
+        left: 50%;
+        transform: translateX(-50%);
+        width: max-content;
+      }
+      
+      .section-title {
+        font-size: 1.8rem;
+      }
+      
+      .social-links {
+        gap: 1rem;
+      }
+      
+      .social-link {
+        min-width: 70px;
+      }
+      
+      .social-icon {
+        font-size: 2rem;
+        width: 60px;
+        height: 60px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .programs-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .welcome-text {
+        font-size: 1.7rem;
+      }
+      
+      .logo {
+        width: 100px;
+        height: 100px;
+      }
+      
+      .logo i {
+        font-size: 50px;
+      }
+      
+      .program-card {
+        padding: 1.5rem;
+      }
+      
+      .social-links {
+        gap: 0.5rem;
+      }
+      
+      .social-link {
+        min-width: 65px;
+      }
+      
+      .social-icon {
+        font-size: 1.8rem;
+        width: 50px;
+        height: 50px;
+      }
+      
+      .social-label {
+        font-size: 0.85rem;
+      }
+      
+      .request-form {
+        padding: 1.5rem;
+      }
+      
+      .form-title {
+        font-size: 1.5rem;
       }
     }
   </style>
 </head>
 <body>
+  <!-- شريط التقدم -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- شاشة الترحيب -->
+  <div class="welcome-screen" id="welcomeScreen">
+    <div class="logo">
+      <i class="fas fa-mobile-alt"></i>
+    </div>
+    <h1 class="welcome-text">مرحبًا في <span>IPA App</span><br>متجر التطبيقات المعدلة</h1>
+  </div>
+
   <header>
-    Ipa App
-    <button class="toggle-mode" onclick="toggleDarkMode()">الوضع الليلي</button>
+    <div class="header-content">
+      <div class="header-buttons">
+        <button class="header-btn" onclick="toggleDarkMode()">
+          <i class="fas fa-sun"></i> الوضع النهاري
+        </button>
+        <button class="header-btn" onclick="openRequestForm()">
+          <i class="fas fa-plus"></i> طلب تطبيق
+        </button>
+      </div>
+      <h1>IPA App</h1>
+    </div>
   </header>
 
-
-    <div class="program-card">
-      <img src="https://j.top4top.io/p_3455habtc1.png" alt="برنامج 2">
-      <div class="program-title">YouTube</div>
-      <div class="program-description">iSponsorBlock 1.2.12v</div>
-      <a class="install-button" href="https://download1588.mediafire.com/si2ch1rzcuwgfqAj5J0WO8E1gKR_FLcl2CIWebibASIgkHizUhyRZBXYXUR5MX4P6tVz6ERzmeBwJMhWscsG2vThdiZ2_Hz9c2dVxSg5BE5O1eCwOvkpRIG9WUgt9UHjZcA8IpCPYwH-RHooHGblse9OEkUrXbk8rFQUrWu_FlrNKMY/7ubf7xm8ne8n2pj/YouTube_20.23.3_iSponsorBlock.ipa" target="_blank">تثبيت</a>
+  <main>
+    <h2 class="section-title">أفضل التطبيقات المعدلة</h2>
+    
+    <div class="tools-container">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="ابحث عن تطبيق...">
+      </div>
+      
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">
+          <i class="fas fa-th"></i> الكل
+        </button>
+        <button class="filter-btn" data-filter="social">
+          <i class="fas fa-comments"></i> التواصل
+        </button>
+        <button class="filter-btn" data-filter="media">
+          <i class="fas fa-play-circle"></i> الوسائط
+        </button>
+        <button class="filter-btn" data-filter="tools">
+          <i class="fas fa-tools"></i> الأدوات
+        </button>
+      </div>
     </div>
+    
+    <div class="programs-container" id="appsContainer">
+      <!-- YouTube -->
+      <div class="program-card" data-category="media">
+        <div class="program-badge">الأكثر تحميلاً</div>
+        <img src="https://j.top4top.io/p_3455habtc1.png" alt="YouTube">
+        <div class="program-title">YouTube</div>
+        <div class="program-description">تطبيق يوتيوب معدل بدون إعلانات مع ميزات إضافية</div>
+        <div class="version-info">iSponsorBlock 1.2.12v</div>
+        <div class="rating">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
+          <span>(4.7)</span>
+        </div>
+        <a class="install-button" href="https://download1588.mediafire.com/si2ch1rzcuwgfqAj5J0WO8E1gKR_FLcl2CIWebibASIgkHizUhyRZBXYXUR5MX4P6tVz6ERzmeBwJMhWscsG2vThdiZ2_Hz9c2dVxSg5BE5O1eCwOvkpRIG9WUgt9UHjZcA8IpCPYwH-RHooHGblse9OEkUrXbk8rFQUrWu_FlrNKMY/7ubf7xm8ne8n2pj/YouTube_20.23.3_iSponsorBlock.ipa" target="_blank">
+          <i class="fas fa-download"></i> تثبيت التطبيق
+        </a>
+      </div>
 
-    <div class="program-card">
-      <img src="https://e.top4top.io/p_3455o55u21.png" alt="برنامج 3">
-      <div class="program-title">Instagram</div>
-      <div class="program-description">BHinstagram 1.2v</div>
-      <a class="install-button" href="https://download944.mediafire.com/irzphijd7gbgHsZjKhwbjyv5rG9ohHknDYZZIKKK7YSlqbqg0P0zWk1_oNMZcabXGWtb8UNSZ3xw1e9KF8Tj7dVzx52ljXLqaySXVi3ehZ_zyGxFiuD7tjClpGlo1mMFqZYzUEYinN3zyy4VTp_2vsnSUb4Z--AX4igHyX27FJciO3w/0hz26rogl2lwpzl/instagram.png" target="_blank">تثبيت</a>
-    </div>
+      <!-- Instagram -->
+      <div class="program-card" data-category="social">
+        <img src="https://e.top4top.io/p_3455o55u21.png" alt="Instagram">
+        <div class="program-title">Instagram</div>
+        <div class="program-description">إنستغرام معدل مع ميزات تحميل الصور والخصوصية</div>
+        <div class="version-info">BHinstagram 1.2v</div>
+        <div class="rating">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="far fa-star"></i>
+          <span>(4.2)</span>
+        </div>
+        <a class="install-button" href="https://download944.mediafire.com/irzphijd7gbgHsZjKhwbjyv5rG9ohHknDYZZIKKK7YSlqbqg0P0zWk1_oNMZcabXGWtb8UNSZ3xw1e9KF8Tj7dVzx52ljXLqaySXVi3ehZ_zyGxFiuD7tjClpGlo1mMFqZYzUEYinN3zyy4VTp_2vsnSUb4Z--AX4igHyX27FJciO3w/0hz26rogl2lwpzl/instagram.png" target="_blank">
+          <i class="fas fa-download"></i> تثبيت التطبيق
+        </a>
+      </div>
 
-    <div class="program-card">
-      <img src="https://l.top4top.io/p_3455649e81.png" alt="برنامج 4">
-      <div class="program-title">TikTok</div>
-      <div class="program-description">ACTikTok 2.1v</div>
-      <a class="install-button" href="https://download1527.mediafire.com/eqi5d2fen9qg3gJSiWsH3oMrZZSQAUhRMw6MBlmmC8gP_Y2fDlejcFQ3ffWJ_LB1eJzVvIoxXWJxXVwmDifxQcSBoQg3iPx9cpK3F4FQCHWvFeczELSgQ3lqyEJWm4Hyjr-71RWGZdKg54eAAnx3L-3xV5LwmxUCoLDfb6fkmcxJtAI/y2mnojlvfkvvqq1/TikTok_40.1.0_ACTikTok.ipa" target="_blank">تثبيت</a>
-    </div>
+      <!-- TikTok -->
+      <div class="program-card" data-category="media">
+        <img src="https://l.top4top.io/p_3455649e81.png" alt="TikTok">
+        <div class="program-title">TikTok</div>
+        <div class="program-description">تطبيق تيك توك معدل بدون إعلانات وتحميل الفيديوهات</div>
+        <div class="version-info">ACTikTok 2.1v</div>
+        <div class="rating">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <span>(4.9)</span>
+        </div>
+        <a class="install-button" href="https://download1527.mediafire.com/eqi5d2fen9qg3gJSiWsH3oMrZZSQAUhRMw6MBlmmC8gP_Y2fDlejcFQ3ffWJ_LB1eJzVvIoxXWJxXVwmDifxQcSBoQg3iPx9cpK3F4FQCHWvFeczELSgQ3lqyEJWm4Hyjr-71RWGZdKg54eAAnx3L-3xV5LwmxUCoLDfb6fkmcxJtAI/y2mnojlvfkvvqq1/TikTok_40.1.0_ACTikTok.ipa" target="_blank">
+          <i class="fas fa-download"></i> تثبيت التطبيق
+        </a>
+      </div>
 
-    <div class="program-card">
-      <img src="https://d.top4top.io/p_3455rznff1.png" alt="برنامج 5">
-      <div class="program-title">X</div>
-      <div class="program-description">BHX 4.4v</div>
-      <a class="install-button" href="https://download1349.mediafire.com/ylj9y4jz3z6gwrhThe-Vulqzq199T9pnSZt-AbPIQT5kXEBQe_iliIEgpkHINbV7q91kOUuIYGFn_1M2I2DHypT_ooJhDWOIoRO9brBtB7nuwdqnVB_RdnE7_cmkn4ZUdyz30HEwdRLfiKz5NBfRcIZnamRP0wsZm0VXfKiUMcyi-M8/sm657n655a0tkv7/Twitter_11.4_BHX.ipa" target="_blank">تثبيت</a>
-    </div>
+      <!-- X (Twitter) -->
+      <div class="program-card" data-category="social">
+        <img src="https://d.top4top.io/p_3455rznff1.png" alt="X">
+        <div class="program-title">X</div>
+        <div class="program-description">تطبيق X (تويتر) معدل مع ميزات متقدمة</div>
+        <div class="version-info">BHX 4.4v</div>
+        <div class="rating">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
+          <i class="far fa-star"></i>
+          <span>(3.8)</span>
+        </div>
+        <a class="install-button" href="https://download1349.mediafire.com/ylj9y4jz3z6gwrhThe-Vulqzq199T9pnSZt-AbPIQT5kXEBQe_iliIEgpkHINbV7q91kOUuIYGFn_1M2I2DHypT_ooJhDWOIoRO9brBtB7nuwdqnVB_RdnE7_cmkn4ZUdyz30HEwdRLfiKz5NBfRcIZnamRP0wsZm0VXfKiUMcyi-M8/sm657n655a0tkv7/Twitter_11.4_BHX.ipa" target="_blank">
+          <i class="fas fa-download"></i> تثبيت التطبيق
+        </a>
+      </div>
 
-    <div class="program-card">
-      <img src="https://f.top4top.io/p_34552y84k1.png" alt="برنامج 6">
-      <div class="program-title">Messenger</div>
-      <div class="program-description">Flow 1.0v</div>
-      <a class="install-button" href="https://download1501.mediafire.com/2pecv8rs2urgzY2tgHQ9fxDEB5uFdwP7g8Jqkt9yUaPxWWxm3Bccy9hLX5GpEX_a9nSlsV3yWfSGhthESEkWxjBRAkPyquj3EDPIFww7p_BpGcgCEpswSKRq2Q-eObXGTppgemyhJuo_JPS5sHovU0516XI8Mh_fOWp6-lRGaRuI1EA/o97wtdwht6l36l5/Messenger_511.0.0_Flow.ipa" target="_blank">تثبيت</a>
-    </div>
+      <!-- Messenger -->
+      <div class="program-card" data-category="social">
+        <img src="https://f.top4top.io/p_34552y84k1.png" alt="Messenger">
+        <div class="program-title">Messenger</div>
+        <div class="program-description">ماسنجر معدل مع واجهة حديثة وميزات جديدة</div>
+        <div class="version-info">Flow 1.0v</div>
+        <div class="rating">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="far fa-star"></i>
+          <span>(4.1)</span>
+        </div>
+        <a class="install-button" href="https://download1501.mediafire.com/2pecv8rs2urgzY2tgHQ9fxDEB5uFdwP7g8Jqkt9yUaPxWWxm3Bccy9hLX5GpEX_a9nSlsV3yWfSGhthESEkWxjBRAkPyquj3EDPIFww7p_BpGcgCEpswSKRq2Q-eObXGTppgemyhJuo_JPS5sHovU0516XI8Mh_fOWp6-lRGaRuI1EA/o97wtdwht6l36l5/Messenger_511.0.0_Flow.ipa" target="_blank">
+          <i class="fas fa-download"></i> تثبيت التطبيق
+        </a>
+      </div>
 
-    <div class="program-card">
-      <img src="https://a.top4top.io/p_3455330vm1.png" alt="برنامج 7">
-      <div class="program-title">Facebook</div>
-      <div class="program-description">Glow 1.0.1v</div>
-      <a class="install-button" href="https://download948.mediafire.com/kjmv53a48fyg8Qfj3eSj2sG1TDw0jEv8sDglNirjh196FYkrg2V-HrH5H9ho6xQCOIDkiWdChdVBa1yezmLcqY9CPhwcF62tO24LWx-8PIwMHtR6ck0sHJR0LagXHzA7D1MU-9FYw0xFUcd9bfCFlLMBjp6Owr6xEr5SLNH-NSTIaPU/k3dmpscmlbn4cgn/Facebook_517.0.0_Glow.ipa" target="_blank">تثبيت</a>
-    </div>
+      <!-- Facebook -->
+      <div class="program-card" data-category="social">
+        <img src="https://a.top4top.io/p_3455330vm1.png" alt="Facebook">
+        <div class="program-title">Facebook</div>
+        <div class="program-description">فيسبوك معدل بدون إعلانات وتصميم متميز</div>
+        <div class="version-info">Glow 1.0.1v</div>
+        <div class="rating">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
+          <span>(4.5)</span>
+        </div>
+        <a class="install-button" href="https://download948.mediafire.com/kjmv53a48fyg8Qfj3eSj2sG1TDw0jEv8sDglNirjh196FYkrg2V-HrH5H9ho6xQCOIDkiWdChdVBa1yezmLcqY9CPhwcF62tO24LWx-8PIwMHtR6ck0sHJR0LagXHzA7D1MU-9FYw0xFUcd9bfCFlLMBjp6Owr6xEr5SLNH-NSTIaPU/k3dmpscmlbn4cgn/Facebook_517.0.0_Glow.ipa" target="_blank">
+          <i class="fas fa-download"></i> تثبيت التطبيق
+        </a>
+      </div>
 
-    <div class="program-card">
-      <img src="https://f.top4top.io/p_3455hfk3c1.png" alt="برنامج 8">
-      <div class="program-title">Jodel</div>
-      <div class="program-description">PaidACJodel 1.7v</div>
-      <a class="install-button" href="https://download1085.mediafire.com/ce5y6173zslgEZHTxwLHtW1aZkXiHCEnP-mTTztWTK9ng_dw0U4buUbCbEr0J8n-kJB649wviUZptUfYF9fOVekHPqnu0LCN2WsgatLPTE6WM8MwBahs6TYV2TwVScHba_7mY0zZzy0QLKVgmD_b_LCWRcRLR_8gpvy_qbadF_hE9VE/giqxf40g41j5shx/Jodel_7.149_ACJodel.ipa" target="_blank">تثبيت</a>
-    </div>
+      <!-- Jodel -->
+      <div class="program-card" data-category="social">
+        <div class="program-badge">جديد</div>
+        <img src="https://f.top4top.io/p_3455hfk3c1.png" alt="Jodel">
+        <div class="program-title">Jodel</div>
+        <div class="program-description">تطبيق جودل معدل مع ميزات إضافية</div>
+        <div class="version-info">PaidACJodel 1.7v</div>
+        <div class="rating">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
+          <i class="far fa-star"></i>
+          <span>(3.7)</span>
+        </div>
+        <a class="install-button" href="https://download1085.mediafire.com/ce5y6173zslgEZHTxwLHtW1aZkXiHCEnP-mTTztWTK9ng_dw0U4buUbCbEr0J8n-kJB649wviUZptUfYF9fOVekHPqnu0LCN2WsgatLPTE6WM8MwBahs6TYV2TwVScHba_7mY0zZzy0QLKVgmD_b_LCWRcRLR_8gpvy_qbadF_hE9VE/giqxf40g41j5shx/Jodel_7.149_ACJodel.ipa" target="_blank">
+          <i class="fas fa-download"></i> تثبيت التطبيق
+        </a>
+      </div>
 
-    <div class="program-card">
-      <img src="https://k.top4top.io/p_3457lip8f1.png" alt="برنامج 9">
-      <div class="program-title">Twitch</div>
-      <div class="program-description">TwitchAdBlock 0.1.5v</div>
-      <a class="install-button" href="https://download850.mediafire.com/cvkeimm8o9jgzvzOz6B2EYpghWs8HS8dUUANN6-54xfgL7h7lXkA3KbRmH0X8rSctq26hyIF27dd_auAxm-7wxw_j-FQBQr6BzZbf1Eiblu2HAK3k4DYd95yy32Dzus8D9OAoZXt8yjhfy6hWlVJMpjSFggRB0ztvFlJehdTYs0gSsk/pcicv4l421vtoo8/Twitch_24.9_TwitchAdBlock.ipa" target="_blank">تثبيت</a>
-    </div>
+      <!-- Twitch -->
+      <div class="program-card" data-category="media">
+        <img src="https://k.top4top.io/p_3457lip8f1.png" alt="Twitch">
+        <div class="program-title">Twitch</div>
+        <div class="program-description">تطبيق تويش معدل بدون إعلانات أثناء البث</div>
+        <div class="version-info">TwitchAdBlock 0.1.5v</div>
+        <div class="rating">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <span>(5.0)</span>
+        </div>
+        <a class="install-button" href="https://download850.mediafire.com/cvkeimm8o9jgzvzOz6B2EYpghWs8HS8dUUANN6-54xfgL7h7lXkA3KbRmH0X8rSctq26hyIF27dd_auAxm-7wxw_j-FQBQr6BzZbf1Eiblu2HAK3k4DYd95yy32Dzus8D9OAoZXt8yjhfy6hWlVJMpjSFggRB0ztvFlJehdTYs0gSsk/pcicv4l421vtoo8/Twitch_24.9_TwitchAdBlock.ipa" target="_blank">
+          <i class="fas fa-download"></i> تثبيت التطبيق
+        </a>
+      </div>
 
-    <div class="program-card">
-      <img src="https://g.top4top.io/p_3457rnboq1.png" alt="برنامج 10">
-      <div class="program-title">WhatsApp</div>
-      <div class="program-description">Watusi 1.2.74v</div>
-      <a class="install-button" href="https://download848.mediafire.com/mvlqli1vvmxgsKl9ABSxFmPBJiqOp4NAYznCOhtwGPKKfuoPZDdETPwxGnQRK6PlruabHYBAvDZCYdtDMZ_IG73HLoSHNxkSVpT91hywq2jdqDW620ICfHPJt7X-zI5wjRt2VwAbp2Fz2qHz3xo4SfaN7lwZkizJL_9JCp8DrcC7Utc/jx9b9n5h30t0qsk/WhatsApp_25.18.7_Watusi.ipa" target="_blank">تثبيت</a>
-    </div>
+      <!-- WhatsApp -->
+      <div class="program-card" data-category="social">
+        <img src="https://g.top4top.io/p_3457rnboq1.png" alt="WhatsApp">
+        <div class="program-title">WhatsApp</div>
+        <div class="program-description">واتساب معدل مع ميزات متقدمة للخصوصية</div>
+        <div class="version-info">Watusi 1.2.74v</div>
+        <div class="rating">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
+          <span>(4.6)</span>
+        </div>
+        <a class="install-button" href="https://download848.mediafire.com/mvlqli1vvmxgsKl9ABSxFmPBJiqOp4NAYznCOhtwGPKKfuoPZDdETPwxGnQRK6PlruabHYBAvDZCYdtDMZ_IG73HLoSHNxkSVpT91hywq2jdqDW620ICfHPJt7X-zI5wjRt2VwAbp2Fz2qHz3xo4SfaN7lwZkizJL_9JCp8DrcC7Utc/jx9b9n5h30t0qsk/WhatsApp_25.18.7_Watusi.ipa" target="_blank">
+          <i class="fas fa-download"></i> تثبيت التطبيق
+        </a>
+      </div>
 
-    <div class="program-card">
-      <img src="https://j.top4top.io/p_34572x9da1.png" alt="برنامج 11">
-      <div class="program-title">WhatsApp Bs</div>
-      <div class="program-description">Watusi 1.2.74v</div>
-      <a class="install-button" href="https://download1528.mediafire.com/ni3o02qb903gkpIRVGqwgrIgdlL5IZVVH-gaJJuQCLhNqBEFLKLn0rktYOueXzuCQS3gJSDuxxZNH2D6GhBY14d3EKHtMubnbgXqEtLkXZRCs4_Xz4idJVUp3C0W5fzRZ4tu_KHB8mP9dbFZB9l1N6a1jNmP8eWR9nG52f5YWNTohyU/1727pfhw2le31jt/WhatsApp+Business_25.17.81_Watusi.ipa" target="_blank">تثبيت</a>
+      <!-- WhatsApp Business -->
+      <div class="program-card" data-category="tools">
+        <img src="https://j.top4top.io/p_34572x9da1.png" alt="WhatsApp Business">
+        <div class="program-title">WhatsApp Business</div>
+        <div class="program-description">نسخة الأعمال من واتساب مع ميزات معدلة</div>
+        <div class="version-info">Watusi 1.2.74v</div>
+        <div class="rating">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="far fa-star"></i>
+          <span>(4.0)</span>
+        </div>
+        <a class="install-button" href="https://download1528.mediafire.com/ni3o02qb903gkpIRVGqwgrIgdlL5IZVVH-gaJJuQCLhNqBEFLKLn0rktYOueXzuCQS3gJSDuxxZNH2D6GhBY14d3EKHtMubnbgXqEtLkXZRCs4_Xz4idJVUp3C0W5fzRZ4tu_KHB8mP9dbFZB9l1N6a1jNmP8eWR9nG52f5YWNTohyU/1727pfhw2le31jt/WhatsApp+Business_25.17.81_Watusi.ipa" target="_blank">
+          <i class="fas fa-download"></i> تثبيت التطبيق
+        </a>
+      </div>
     </div>
-  </section>
+  </main>
 
   <footer>
-    Hz Bahkali جميع الحقوق محفوظة &copy; 2025
+    <div class="footer-content">
+      <div class="social-section">
+        <h3 class="social-title">تواصل معنا</h3>
+        <div class="social-links">
+          <a href="https://www.instagram.com/sww_p" target="_blank" class="social-link">
+            <div class="social-icon">
+              <i class="fab fa-instagram" style="color: #e1306c;"></i>
+            </div>
+            <span class="social-label">إنستغرام</span>
+          </a>
+          
+          <a href="https://www.snapchat.com/add/sww_p" target="_blank" class="social-link">
+            <div class="social-icon">
+              <i class="fab fa-snapchat-ghost" style="color: #fffc00;"></i>
+            </div>
+            <span class="social-label">سناب شات</span>
+          </a>
+          
+          <a href="https://twitter.com/sww_p" target="_blank" class="social-link">
+            <div class="social-icon">
+              <i class="fab fa-twitter" style="color: #1da1f2;"></i>
+            </div>
+            <span class="social-label">تويتر</span>
+          </a>
+          
+          <a href="https://t.me/sww_p" target="_blank" class="social-link">
+            <div class="social-icon">
+              <i class="fab fa-telegram" style="color: #0088cc;"></i>
+            </div>
+            <span class="social-label">تليجرام</span>
+          </a>
+        </div>
+      </div>
+      
+      <p>تابعنا على وسائل التواصل الاجتماعي للحصول على آخر التحديثات</p>
+      <p class="copyright">Hz Bahkali جميع الحقوق محفوظة &copy; 2025</p>
+    </div>
   </footer>
 
+  <!-- نموذج طلب التطبيق -->
+  <div class="request-modal" id="requestModal">
+    <div class="request-form">
+      <div class="form-header">
+        <h2 class="form-title">طلب تطبيق جديد</h2>
+        <button class="close-btn" onclick="closeRequestForm()">&times;</button>
+      </div>
+      <div class="form-group">
+        <label for="appName">اسم التطبيق المطلوب</label>
+        <input type="text" id="appName" placeholder="أدخل اسم التطبيق الذي ترغب به" required>
+      </div>
+      <div class="form-group">
+        <label for="appVersion">النسخة المطلوبة (اختياري)</label>
+        <input type="text" id="appVersion" placeholder="أدخل رقم الإصدار إذا كنت تعرفه">
+      </div>
+      <div class="form-group">
+        <label for="appFeatures">الميزات المطلوبة</label>
+        <textarea id="appFeatures" placeholder="ما هي الميزات التي ترغب في وجودها في التطبيق المعدل؟"></textarea>
+      </div>
+      <button class="submit-btn" id="submitRequestBtn">
+        <span class="btn-text"><i class="fas fa-paper-plane"></i> إرسال الطلب</span>
+        <span class="spinner"><i class="fas fa-spinner"></i></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- رسالة تأكيد -->
+  <div class="confirmation" id="confirmation">
+    <i class="fas fa-check-circle"></i> تم إرسال طلبك بنجاح، شكراً لك!
+  </div>
+
   <script>
+    // شاشة الترحيب
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    setTimeout(() => {
+      welcomeScreen.classList.add('hidden');
+    }, 3000);
+
+    // شريط التقدم
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (scrollTop / scrollHeight) * 100;
+      document.getElementById('progressBar').style.width = scrolled + '%';
+    });
+
+    // الوضع الليلي (الافتراضي)
     function toggleDarkMode() {
-      document.body.classList.toggle('dark');
+      document.body.classList.toggle('light');
+      const modeButton = document.querySelector('.header-btn:first-child');
+      const isLight = document.body.classList.contains('light');
+      
+      if (isLight) {
+        modeButton.innerHTML = '<i class="fas fa-moon"></i> الوضع الليلي';
+      } else {
+        modeButton.innerHTML = '<i class="fas fa-sun"></i> الوضع النهاري';
+      }
+      
+      // حفظ التفضيل
+      localStorage.setItem('lightMode', isLight);
     }
+
+    // استعادة تفضيل الوضع
+    if (localStorage.getItem('lightMode') === 'true') {
+      document.body.classList.add('light');
+      document.querySelector('.header-btn:first-child').innerHTML = '<i class="fas fa-moon"></i> الوضع الليلي';
+    } else {
+      // الوضع الليلي هو الافتراضي
+      document.body.classList.remove('light');
+      document.querySelector('.header-btn:first-child').innerHTML = '<i class="fas fa-sun"></i> الوضع النهاري';
+    }
+
+    // البحث والتصفية
+    const searchInput = document.getElementById('searchInput');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const apps = document.querySelectorAll('.program-card');
+
+    searchInput.addEventListener('input', filterApps);
+    
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // إزالة النشط من جميع الأزرار
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        // إضافة النشط للزر المحدد
+        button.classList.add('active');
+        filterApps();
+      });
+    });
+
+    function filterApps() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+      
+      apps.forEach(app => {
+        const appName = app.querySelector('.program-title').textContent.toLowerCase();
+        const appDesc = app.querySelector('.program-description').textContent.toLowerCase();
+        const appCategory = app.dataset.category;
+        
+        const matchesSearch = appName.includes(searchTerm) || appDesc.includes(searchTerm);
+        const matchesFilter = activeFilter === 'all' || appCategory === activeFilter;
+        
+        if (matchesSearch && matchesFilter) {
+          app.style.display = 'flex';
+          app.style.animation = 'fadeIn 0.6s forwards';
+        } else {
+          app.style.display = 'none';
+        }
+      });
+    }
+
+    // إضافة أنيميشن للبطاقات عند التحميل
+    document.addEventListener('DOMContentLoaded', () => {
+      const cards = document.querySelectorAll('.program-card');
+      cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.style.animation = 'fadeIn 0.8s forwards';
+      });
+    });
+
+    // نموذج طلب التطبيق
+    const requestModal = document.getElementById('requestModal');
+    const confirmation = document.getElementById('confirmation');
+    const submitRequestBtn = document.getElementById('submitRequestBtn');
+    const btnText = submitRequestBtn.querySelector('.btn-text');
+    const spinner = submitRequestBtn.querySelector('.spinner');
+    
+    function openRequestForm() {
+      requestModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeRequestForm() {
+      requestModal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+    
+    function submitRequest() {
+      const appName = document.getElementById('appName').value;
+      const appVersion = document.getElementById('appVersion').value;
+      const appFeatures = document.getElementById('appFeatures').value;
+      
+      if (!appName) {
+        alert('يرجى إدخال اسم التطبيق المطلوب');
+        return;
+      }
+      
+      // عرض مؤشر التحميل
+      btnText.style.display = 'none';
+      spinner.style.display = 'block';
+      submitRequestBtn.disabled = true;
+      
+      // إعداد بيانات البريد الإلكتروني
+      const templateParams = {
+        to_email: 'swwp142173@gmail.com',
+        app_name: gmail,
+        app_version: appVersion || 'غير محدد',
+        app_features: appFeatures || 'غير محددة',
+        timestamp: new Date().toLocaleString('ar-SA')
+      };
+      
+      // إرسال البريد الإلكتروني باستخدام EmailJS
+      emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+        .then(function(response) {
+          console.log('SUCCESS!', response.status, response.text);
+          
+          // إخفاء مؤشر التحميل
+          btnText.style.display = 'block';
+          spinner.style.display = 'none';
+          submitRequestBtn.disabled = false;
+          
+          // إغلاق النموذج
+          closeRequestForm();
+          
+          // إظهار رسالة التأكيد
+          confirmation.classList.add('show');
+          
+          // إخفاء الرسالة بعد 5 ثوان
+          setTimeout(() => {
+            confirmation.classList.remove('show');
+          }, 5000);
+          
+          // مسح الحقول
+          document.getElementById('appName').value = '';
+          document.getElementById('appVersion').value = '';
+          document.getElementById('appFeatures').value = '';
+        }, function(error) {
+          console.log('FAILED...', error);
+          
+          // إخفاء مؤشر التحميل
+          btnText.style.display = 'block';
+          spinner.style.display = 'none';
+          submitRequestBtn.disabled = false;
+          
+          alert('حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.');
+        });
+    }
+
+    // إغلاق النموذج عند النقر خارج المحتوى
+    requestModal.addEventListener('click', function(e) {
+      if (e.target === requestModal) {
+        closeRequestForm();
+      }
+    });
+    
+    // إرسال النموذج عند الضغط على Enter
+    document.getElementById('appName').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        submitRequest();
+      }
+    });
+    
+    document.getElementById('appVersion').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        submitRequest();
+      }
+    });
+    
+    // إضافة مستمع حدث لزر الإرسال
+    submitRequestBtn.addEventListener('click', submitRequest);
   </script>
 </body>
 </html>
